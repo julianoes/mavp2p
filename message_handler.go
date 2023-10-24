@@ -142,24 +142,24 @@ func (mh *messageHandler) onEventFrame(evt *gomavlib.EventFrame) {
 	}
 
 	// if message has a target, route only to it
-	systemID, componentID, hasTarget := getTarget(evt.Message())
-	if hasTarget && systemID > 0 {
-		var key *remoteNodeKey
-		if componentID == 0 {
-			key = mh.findNodeBySystemID(systemID)
-		} else {
-			key = mh.findNodeBySystemAndComponentID(systemID, componentID)
-		}
+	//systemID, componentID, hasTarget := getTarget(evt.Message())
+	//if hasTarget && systemID > 0 {
+	//	var key *remoteNodeKey
+	//	if componentID == 0 {
+	//		key = mh.findNodeBySystemID(systemID)
+	//	} else {
+	//		key = mh.findNodeBySystemAndComponentID(systemID, componentID)
+	//	}
 
-		if key != nil {
-			if key.channel == evt.Channel {
-				log.Printf("Warning: channel %s attempted to send message to itself, discarding", key.channel)
-			} else {
-				mh.node.WriteFrameTo(key.channel, evt.Frame) //nolint:errcheck
-				return
-			}
-		}
-	}
+	//	if key != nil {
+	//		if key.channel == evt.Channel {
+	//			log.Printf("Warning: channel %s attempted to send message to itself, discarding", key.channel)
+	//		} else {
+	//			mh.node.WriteFrameTo(key.channel, evt.Frame) //nolint:errcheck
+	//			return
+	//		}
+	//	}
+	//}
 
 	// otherwise, route message to every channel
 	mh.node.WriteFrameExcept(evt.Channel, evt.Frame) //nolint:errcheck
